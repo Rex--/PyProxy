@@ -3,7 +3,7 @@ import threading
 
 local_port = 22
 
-remote_port = 9229
+remote_port = 3180
 
 class ClientCon(threading.Thread):
 
@@ -15,7 +15,8 @@ class ClientCon(threading.Thread):
     def run(self):
         while True:
             self._data = self._client.recv(4096)
-            if not data:
+            if not self._data:
+		print "Not Data"
                 break
             self._server.sendall(self._data)
 
@@ -29,7 +30,7 @@ class ServiceCon(threading.Thread):
     def run(self):
         while True:
             self._data = self._service.recv(4096)
-            if not data:
+            if not self._data:
                 break
             self._server.sendall(self._data)
 
@@ -46,3 +47,6 @@ serviceSock.connect(("localhost", local_port))
 
 cc = ClientCon(client, serviceSock)
 sc = ServiceCon(serviceSock, client)
+
+cc.start()
+sc.start()

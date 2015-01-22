@@ -17,7 +17,7 @@ class ClientCon(threading.Thread):
     def run(self):
         while True:
             self._data = self._client.recv(4096)
-            print "- - - - - Client: Client -> Server - - - - -\n" + data
+            print "- - - - - Client: Client -> Server - - - - -\n" + self._data
             if not self._data:
                 break
             self._server.sendall(self._data)
@@ -33,7 +33,7 @@ class ServerCon(threading.Thread):
     def run(self):
         while True:
             self._data = self._server.recv(4096)
-            print "- - - - - Client: Server -> Client - - - - -\n" + data
+            print "- - - - - Client: Server -> Client - - - - -\n" + self._data
             if not self._data:
                 break
             self._client.send(self._data)

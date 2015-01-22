@@ -7,18 +7,18 @@ remote_port = 3180
 
 class ClientCon(threading.Thread):
 
-    def __init__(self, client, server):
+    def __init__(self, client, service):
         threading.Thread.__init__(self)
         self._client = client
-        self._server = server
+        self._service = service
 
     def run(self):
         while True:
             self._data = self._client.recv(4096)
+            print "- - - - - Server: Client -> Service - - - - -\n" + data
             if not self._data:
-		print "Not Data"
                 break
-            self._server.sendall(self._data)
+            self._service.sendall(self._data)
 
 class ServiceCon(threading.Thread):
 
@@ -30,9 +30,10 @@ class ServiceCon(threading.Thread):
     def run(self):
         while True:
             self._data = self._service.recv(4096)
+            print "- - - - - Server: Service -> Client - - - - -\n" + data
             if not self._data:
                 break
-            self._server.sendall(self._data)
+            self._service.sendall(self._data)
 
 clientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 serviceSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

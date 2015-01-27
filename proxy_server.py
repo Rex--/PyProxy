@@ -15,7 +15,6 @@ class ClientCon(threading.Thread):
     def run(self):
         while True:
             self._data = self._client.recv(4096)
-            print "- - - - - Server: Client -> Service - - - - -\n" + self._data
             if not self._data:
                 break
             self._service.sendall(self._data)
@@ -30,10 +29,9 @@ class ServiceCon(threading.Thread):
     def run(self):
         while True:
             self._data = self._service.recv(4096)
-            print "- - - - - Server: Service -> Client - - - - -\n" + self._data
             if not self._data:
                 break
-            self._service.sendall(self._data)
+            self._client.sendall(self._data)
 
 clientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 serviceSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

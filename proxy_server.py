@@ -16,6 +16,7 @@ class ClientCon(threading.Thread):
     def run(self):
         while True:
             self._data = self._client.recv(8192)
+            print " - - - - - Client -> Service - - - - -"
             if not self._data:
                 break
             self._service.sendall(base64.b64decode(self._data))
@@ -30,6 +31,7 @@ class ServiceCon(threading.Thread):
     def run(self):
         while True:
             self._data = self._service.recv(8192)
+            print " - - - - - Service -> Client - - - - - " + self._data
             if not self._data:
                 break
             self._client.sendall(base64.b64encode(self._data))

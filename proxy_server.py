@@ -1,5 +1,6 @@
 import socket
 import threading
+import base64
 
 local_port = 22
 
@@ -14,10 +15,10 @@ class ClientCon(threading.Thread):
 
     def run(self):
         while True:
-            self._data = self._client.recv(4096)
+            self._data = self._client.recv(8192)
             if not self._data:
                 break
-            self._service.sendall(self._data)
+            self._service.sendall(base64.b64decode(self._data))
 
 class ServiceCon(threading.Thread):
 
@@ -28,10 +29,10 @@ class ServiceCon(threading.Thread):
 
     def run(self):
         while True:
-            self._data = self._service.recv(4096)
+            self._data = self._service.recv(8192)
             if not self._data:
                 break
-            self._client.sendall(self._data)
+            self._client.sendall(base64.b64encode(self._data))
 
 clientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 serviceSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

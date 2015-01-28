@@ -1,5 +1,6 @@
 import socket
 import threading
+import base64
 
 remote_ip   = "192.168.1.107"
 remote_port = 3180
@@ -16,10 +17,10 @@ class ClientCon(threading.Thread):
 
     def run(self):
         while True:
-            self._data = self._client.recv(4096)
+            self._data = self._client.recv(8192)
             if not self._data:
                 break
-            self._server.sendall(self._data)
+            self._server.sendall(base64.b64encode(self._data))
 
 class ServerCon(threading.Thread):
 
@@ -31,10 +32,10 @@ class ServerCon(threading.Thread):
 
     def run(self):
         while True:
-            self._data = self._server.recv(4096)
+            self._data = self._server.recv(8192)
             if not self._data:
                 break
-            self._client.send(self._data)
+            self._client.send(base64.b64decode(self._data))
 
 clientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 serverSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
